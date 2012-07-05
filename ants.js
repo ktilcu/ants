@@ -41,7 +41,9 @@ function AntFarm() {
 
         ctx = can.getContext('2d');
 
-        generateDirt();
+
+        ctx.fillRect(0,0,realWidth, realHeight);
+        
         initAnts();
         loop();
 
@@ -57,7 +59,6 @@ function AntFarm() {
     function Ant(){
         this.x = Math.floor(Math.random()*width);
         this.y = 0;
-        // this.speed = 1;
         var thisAnt = this;
         
         this.actions = [
@@ -96,6 +97,9 @@ function AntFarm() {
 
         for (i = 0; i < l; i++) {
             a = ants[i];
+
+            x = a.x;
+            y = a.y;
             
 
             // Check if dirt is not under ant
@@ -105,7 +109,7 @@ function AntFarm() {
             else {
                 al = a.actions.length;
                 // Cause more left to right
-                r = Math.floor(Math.random()*al*0.9);
+                r = Math.floor(Math.random()*al*0.85);
                 a.actions[r]();
 
             }
@@ -114,27 +118,15 @@ function AntFarm() {
                 dirt[a.x][a.y] = 0;
             }
 
-
+            drawPixel(x,y, 'white');
             drawPixel(a.x, a.y, 'red');
         }
     }
 
     function loop() {
-        render();
         antLoop();
         frames ++;
         setTimeout(loop, 0);
-    }
-
-    function generateDirt() {
-        var x;
-        var y;
-
-        for (x = 0; x < width; x ++) {
-            for (y = surfaceBase; y >= 0; y --) {
-                dirt[x][y] = 0;
-            }
-        }
     }
 
     function drawPixel(x, y, color) {
@@ -143,27 +135,5 @@ function AntFarm() {
 
         ctx.fillStyle = color;
         ctx.fillRect(realX, realY, zoom, zoom);
-    }
-
-    function clear() {
-        ctx.clearRect(0, 0, realWidth, realHeight);
-    }
-
-    function renderDirt() {
-        var x;
-        var y;
-
-        for (x = 0; x < width; x ++) {
-            for (y = 0; y < height; y ++) {
-                if (dirt[x][y]) {
-                    drawPixel(x, y, 'black');
-                }
-            }
-        }
-    }
-
-    function render() {
-        clear();
-        renderDirt();
     }
 }
